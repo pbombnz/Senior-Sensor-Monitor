@@ -7,6 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { SeniorStatusPage } from '../pages/senior-status/senior-status';
 import { BatteryStatusPage } from '../pages/battery-status/battery-status';
+import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { BatteryStatusPage } from '../pages/battery-status/battery-status';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    MqttClientProvider
   ]
 })
 export class AppModule {}

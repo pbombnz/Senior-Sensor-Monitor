@@ -1,33 +1,28 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      MQTT Tutorial
+      Senior Status
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-<ion-card>
-  <ion-card-content>Status: <b>{{mqttStatus}}</b></ion-card-content>
-</ion-card>
+  <ion-card>
+    <ion-card-content>Status: <b>{{mqttClientProvider.mqttStatus}}</b></ion-card-content>
+  </ion-card>
 
-<ion-row justify-content-center align-items-center>
-	<button ion-button (click)="connect()">Connect</button>
-	<button ion-button (click)="disconnect()">Disconnect</button>
-</ion-row>
+  <ion-row justify-content-center align-items-center>
+    <button ion-button (click)="mqttClientProvider.connect()">Connect</button>
+    <button ion-button (click)="mqttClientProvider.disconnect()">Disconnect</button>
+  </ion-row>
 
-<ion-content padding>
+  <ion-card>
+    <ion-card-header>Message Received:</ion-card-header>
+    <ion-card-content>{{mqttClientProvider.message}}</ion-card-content>
+  </ion-card>
 
-<ion-card>
-  <ion-card-header>Message Received:</ion-card-header>
-  <ion-card-content>{{message}}</ion-card-content>
-</ion-card>
-
-<ion-content padding>
-
-<ion-label stacked>Message to Send:</ion-label>
-<ion-textarea [(ngModel)]='messageToSend'>{{messageToSend}}</ion-textarea>
-<button ion-button full (click)="sendMessage()">Send Message</button>
-
+  <ion-label stacked>Message to Send:</ion-label>
+  <ion-textarea [(ngModel)]='mqttClientProvider.messageToSend'>{{mqttClientProvider.messageToSend}}</ion-textarea>
+  <button ion-button full (click)="mqttClientProvider.sendMessage()">Send Message</button>
 </ion-content>

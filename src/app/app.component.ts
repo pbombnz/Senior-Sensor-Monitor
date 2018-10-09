@@ -3,7 +3,6 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-
 import { BatteryStatusPage } from '../pages/battery-status/battery-status';
 import { SeniorStatusPage } from '../pages/senior-status/senior-status';
 
@@ -11,6 +10,7 @@ import { SeniorStatusPage } from '../pages/senior-status/senior-status';
   templateUrl: 'app.html'
 })
 export class MyApp {
+
   tab1Root:any = SeniorStatusPage;
   tab2Root:any = BatteryStatusPage;
 
