@@ -1,4 +1,4 @@
-//import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 declare var Paho: any;
@@ -13,7 +13,7 @@ export class MqttClientProvider {
   topic: string = 'swen325/a3';
   clientId: string = 'bhikhupras'
 
-  constructor() {
+  constructor(http: HttpClient) {
     console.log('Hello MqttClientProvider Provider');
   }
 
