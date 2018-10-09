@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import Paho from 'paho-mqtt';
 
-declare var Paho: any;
-
+//declare var Paho: any;
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-senior-status',
+  templateUrl: 'senior-status.html'
 })
 
-export class HomePage {
+export class SeniorStatusPage {
 
 mqttStatus: string = 'Disconnected';
 mqttClient: any = null;
@@ -25,10 +25,10 @@ clientId: string = 'bhikhupras'
 
   public connect = () => {
     this.mqttStatus = 'Connecting...';
-    //this.mqttClient = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
+    //this.mqttClient = new Paho.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
     let host = "barretts.ecs.vuw.ac.nz";
      host = 'localhost';
-    this.mqttClient = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
+    this.mqttClient = new Paho.Client(host, 8883, '/mqtt', this.clientId);
 
     // set callback handlers
     this.mqttClient.onConnectionLost = this.onConnectionLost;
