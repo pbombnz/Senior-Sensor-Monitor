@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 declare var Paho: any;
@@ -9,79 +8,66 @@ export class MqttClientProvider {
   mqttClient: any = null;
   message: any = '';
   messageToSend: string = 'Your message';
-
   topic: string = 'swen325/a3';
   clientId: string = 'bhikhupras'
 
-  constructor(http: HttpClient) {
-    console.log('Hello MqttClientProvider Provider');
+  constructor() {
+
   }
 
+  public connect = () => {
+  	this.mqttStatus = 'Connecting...';
+  	//this.mqttClient = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
+  	this.mqttClient = new Paho.MQTT.Client('barretts.ecs.vuw.ac.nz', 8883, '/mqtt', this.clientId);
+ 	
+	// set callback handlers
+	this.mqttClient.onConnectionLost = this.onConnectionLost;
+	this.mqttClient.onMessageArrived = this.onMessageArrived;
 
-  public connect() {
-    this.mqttStatus = 'Connecting...';
-    //this.mqttClient = new Paho.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
-    let host = "barretts.ecs.vuw.ac.nz";
-    host = 'localhost';
-    this.mqttClient = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
-
-    // set callback handlers
-    this.mqttClient.onConnectionLost = this.onConnectionLost;
-    this.mqttClient.onMessageArrived = this.onMessageArrived;
-
-    // connect the client
-    console.log('Connecting to mqtt via websocket');
-    //this.mqttClient.connect({timeout:10, userName:'ptweqash', password:'ncU6vlGPp1mN', useSSL:true, onSuccess:this.onConnect, onFailure:this.onFailure});
-    this.mqttClient.connect({
-      timeout: 10,
-      useSSL: false,
-      onSuccess: this.onConnect,
-      onFailure: this.onFailure
-    });
+	// connect the client
+	console.log('Connecting to mqtt via websocket');
+	//this.mqttClient.connect({timeout:10, userName:'ptweqash', password:'ncU6vlGPp1mN', useSSL:true, onSuccess:this.onConnect, onFailure:this.onFailure});
+	this.mqttClient.connect({timeout:10, useSSL:false, onSuccess:this.onConnect, onFailure:this.onFailure});
   }
 
-  public disconnect() {
-    if (this.mqttStatus == 'Connected') {
-      this.mqttStatus = 'Disconnecting...';
-      this.mqttClient.disconnect();
-      this.mqttStatus = 'Disconnected';
-    }
+  public disconnect () {
+  	if(this.mqttStatus == 'Connected') {
+  		this.mqttStatus = 'Disconnecting...';
+  		this.mqttClient.disconnect();
+  		this.mqttStatus = 'Disconnected';
+  	}
   }
 
-  public sendMessage() {
-    if (this.mqttStatus == 'Connected') {
-      this.mqttClient.publish(this.topic, this.messageToSend);
-    }
+  public sendMessage () {
+  	if(this.mqttStatus == 'Connected') {
+  		this.mqttClient.publish(this.topic, this.messageToSend);
+  	}
   }
 
-  public onConnect () {
-    console.log('Connected');
-    this.mqttStatus = 'Connected';
-    // subscribe
-    this.mqttClient.subscribe(this.topic, {
-      onSuccess: () => {
-        console.log('Subscribe: Success');
-      },
-      onFailure: () => {
-        console.log('Subscribe: Failed');
-      }
-    });
-    console.log('Connected2');
+  public onConnect = () => {
+  	console.log('Connected');
+  	this.mqttStatus = 'Connected';
+
+  	// subscribe
+	this.mqttClient.subscribe(this.topic, {
+		onSuccess: () => console.log('subscribe ok'),
+		onFailure: () => console.log('subscribe failed')
+	});
   }
 
-  public onFailure(responseObject) {
-    console.log('Failed to connect');
-    this.mqttStatus = 'Failed to connect';
+  public onFailure = (responseObject) => {
+  	console.log('Failed to connect');
+  	this.mqttStatus = 'Failed to connect';
   }
 
-  public onConnectionLost (responseObject) {
-    if (responseObject.errorCode !== 0) {
-      this.mqttStatus = 'Disconnected';
-    }
+  public onConnectionLost = (responseObject) => {
+   	if (responseObject.errorCode !== 0) {
+   		this.mqttStatus = 'Disconnected';
+  	} 	
   }
 
-  public onMessageArrived(message) {
-    console.log('Received message: ', message.payloadString);
-    this.message = message.payloadString;
-  }  
+  public onMessageArrived = (message) => {
+  	console.log('Received message: ', message.payloadString);
+  	this.message = message.payloadString;
+  }
 }
