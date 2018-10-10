@@ -20,8 +20,10 @@ export class MqttClientProvider {
 
   public connect = () => {
   	this.status = 'Connecting...';
-  	//this.client = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
-  	this.client = new Paho.MQTT.Client('barretts.ecs.vuw.ac.nz', 8883, '/mqtt', this.clientId);
+    //this.client = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
+    let host = 'barretts.ecs.vuw.ac.nz';
+    host = 'localhost';
+  	this.client = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers
 	this.client.onConnectionLost = this.onConnectionLost;
@@ -87,11 +89,11 @@ export class MqttClientProvider {
   public addMessageToBuffer(message) {
     let messageSplit: string[] = message.split(',');
     
-    let date = moment(messageSplit[0]);
-    let room = messageSplit[1];
-    let motion = Number.parseInt(messageSplit[2]);
-    let batteryPercentage = Number.parseInt(messageSplit[3]);
+    let timestamp = moment(messageSplit[0]);
+    let location = messageSplit[1];
+    let motion_status = Number.parseInt(messageSplit[2]);
+    let battery_status = Number.parseInt(messageSplit[3]);
 
-    this.messagesBuffer = Object.assign(this.messagesBuffer, { [room]: { date, room, motion, batteryPercentage }});
+    this.messagesBuffer = Object.assign(this.messagesBuffer, { [location]: { timestamp, location, motion_status, battery_status }});
   }
 }

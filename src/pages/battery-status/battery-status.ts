@@ -9,7 +9,7 @@ import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 export class BatteryStatusPage {
   objectKeys = Object.keys;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public mqttClientProvider: MqttClientProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public mqtt: MqttClientProvider) {
   }
 
   ionViewDidLoad() {

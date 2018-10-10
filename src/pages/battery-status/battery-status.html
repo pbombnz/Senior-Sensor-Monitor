@@ -4,29 +4,43 @@
   </ion-navbar>
 
 </ion-header>
+<ion-content>
+  <div *ngIf="mqtt?.status !== 'Connected';then disconnected_content else connected_content"></div>
+</ion-content>
 
-<ion-content *ngIf="!mqttClientProvider || mqttClientProvider?.mqttStatus !== 'Connected'">
-  <ion-grid style="height: 100;">
-    <ion-row align-items-center style="height: 100;">
+<!-- Display a message to the user that no data is available at the current moment -->
+<ng-template #disconnected_content>
+  <ion-grid style="height: 100%;">
+    <ion-row align-items-center style="height: 100%;">
       <ion-col text-center>
-        <h2>No Sensors Detected</h2>
+        <h2 style="color: grey">No Sensors Detected</h2>
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ng-template>
 
-<ion-content padding *ngIf="mqttClientProvider && objectKeys(mqttClientProvider?.messagesBuffer).length > 0">
-  <ion-card *ngFor="let roomDetails of objectKeys(mqttClientProvider.messagesBuffer)">
+<ng-template #connected_content>
+  <!-- Display Loading Screen if no data is present currently -->
+  <ion-grid *ngIf="objectKeys(mqtt.messagesBuffer).length === 0" style="height: 100%;">
+    <ion-row align-items-center style="height: 100%;">
+      <ion-col text-center>
+        <h2 style="color: grey">Loading Sensor Data...</h2>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Show Battery Data -->
+  <ion-card *ngFor="let location of objectKeys(mqtt.messagesBuffer)">
     <ion-item>
       <ion-row>
         <ion-col>
-          <h2>{{capitalize(roomDetails)}}</h2>
-          <ion-note>Updated {{mqttClientProvider.messagesBuffer[roomDetails].date.fromNow()}}</ion-note>
+          <h2>{{capitalize(location)}}</h2>
+          <ion-note>Updated {{mqtt.messagesBuffer[location].timestamp.fromNow()}}</ion-note>
         </ion-col>
         <ion-col align-self-center text-right>
-          <h2>{{mqttClientProvider.messagesBuffer[roomDetails].batteryPercentage}}%</h2>
+          <h2>{{mqtt.messagesBuffer[location].battery_status}}%</h2>
         </ion-col>
       </ion-row>
     </ion-item>
   </ion-card>
-</ion-content>
+</ng-template>
