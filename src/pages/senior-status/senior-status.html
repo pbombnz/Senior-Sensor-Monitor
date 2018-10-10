@@ -9,20 +9,20 @@
 <ion-content padding>
 
   <ion-card>
-    <ion-card-content>Status: <b>{{mqttClientProvider.mqttStatus}}</b></ion-card-content>
+    <ion-card-content>Status: <b>{{mqtt.status}}</b></ion-card-content>
   </ion-card>
 
   <ion-row justify-content-center align-items-center>
-    <button ion-button (click)="mqttClientProvider.connect()">Connect</button>
-    <button ion-button (click)="mqttClientProvider.disconnect()">Disconnect</button>
+    <button ion-button (click)="mqtt.connect()">Connect</button>
+    <button ion-button (click)="mqtt.disconnect()">Disconnect</button>
   </ion-row>
 
   <ion-card>
     <ion-card-header>Message Received:</ion-card-header>
-    <ion-card-content>{{mqttClientProvider.message}}</ion-card-content>
+    <ion-card-content>{{mqtt.message}}</ion-card-content>
   </ion-card>
 
   <ion-label stacked>Message to Send:</ion-label>
-  <ion-textarea [(ngModel)]='mqttClientProvider.messageToSend'>{{mqttClientProvider.messageToSend}}</ion-textarea>
-  <button ion-button full (click)="mqttClientProvider.sendMessage()">Send Message</button>
+  <ion-textarea [(ngModel)]='mqtt.messageToSend'>{{mqtt.messageToSend}}</ion-textarea>
+  <button ion-button full (click)="mqtt.sendMessage()">Send Message</button>
 </ion-content>

@@ -8,5 +8,5 @@ import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 })
 
 export class SeniorStatusPage {
-  constructor(public navCtrl: NavController, public mqttClientProvider: MqttClientProvider) {}
+  constructor(public navCtrl: NavController, public mqtt: MqttClientProvider) {}
 }
