@@ -21,7 +21,7 @@
 
 <ng-template #connected_content>
   <!-- Display Loading Screen if no data is present currently -->
-  <ion-grid *ngIf="objectKeys(mqtt.messagesBuffer).length === 0" style="height: 100%;">
+  <ion-grid *ngIf="objectKeys(mqtt.locationBuffer).length === 0" style="height: 100%;">
     <ion-row align-items-center style="height: 100%;">
       <ion-col text-center>
         <h2 style="color: grey">Loading Sensor Data...</h2>
@@ -30,15 +30,15 @@
   </ion-grid>
 
   <!-- Show Battery Data -->
-  <ion-card *ngFor="let location of objectKeys(mqtt.messagesBuffer)">
+  <ion-card *ngFor="let location of objectKeys(mqtt.locationBuffer)">
     <ion-item>
       <ion-row>
         <ion-col>
-          <h2>{{capitalize(location)}}</h2>
-          <ion-note>Updated {{mqtt.messagesBuffer[location].timestamp.fromNow()}}</ion-note>
+          <h2>{{mqtt.prettifyLocation(location)}}</h2>
+          <ion-note>Updated {{mqtt.locationBuffer[location].timestamp.fromNow()}}</ion-note>
         </ion-col>
         <ion-col align-self-center text-right>
-          <h2>{{mqtt.messagesBuffer[location].battery_status}}%</h2>
+          <h2>{{mqtt.locationBuffer[location].battery_status}}%</h2>
         </ion-col>
       </ion-row>
     </ion-item>

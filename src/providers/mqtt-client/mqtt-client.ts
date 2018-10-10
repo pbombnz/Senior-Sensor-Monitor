@@ -12,7 +12,9 @@ export class MqttClientProvider {
   topic: string = 'swen325/a3';
   clientId: string = 'bhikhupras';
 
-  messagesBuffer: any = {};
+  startDate: moment.Moment = moment().subtract(1,'days');
+  locationBuffer: any = {};
+  lastSeenLocations: any[]; // The message that holds the latest (parsed) message that had motion detected.
 
   constructor() {
 
@@ -39,7 +41,7 @@ export class MqttClientProvider {
   	if(this.status == 'Connected') {
   		this.status = 'Disconnecting...';
       this.client.disconnect();
-      this.messagesBuffer = {};
+      //this.locationBuffer = {};
   		this.status = 'Disconnected';
   	}
   }
@@ -51,13 +53,21 @@ export class MqttClientProvider {
   }
 
   public onConnect = () => {
-  	console.log('Connecting/Connected - Subscribing');
+    console.log('Connecting/Connected - Subscribing');
 
   	// subscribe
 	this.client.subscribe(this.topic, {
 		onSuccess: () => {
       console.log('Connected - Subscribe Suceeded');
       this.status = 'Connected';
+
+      // Check if first time app has ran.
+      if(!((Object.keys(this.locationBuffer).length === 0 && this.locationBuffer.constructor === Object) && this.lastSeenLocations == undefined)) {
+        console.log('yeah')
+        this.startDate = moment();
+      }
+      this.locationBuffer = {};
+      this.lastSeenLocations = [];
     },
 		onFailure: (responseObject) => {
       console.log('Connected - Subscribe Failed');
@@ -78,11 +88,11 @@ export class MqttClientProvider {
   }
 
   public onMessageArrived = (message) => {
-  	console.log('Received message: ', message.payloadString);
+  	//console.log('Received message: ', message.payloadString);
     this.message = message.payloadString;
     this.addMessageToBuffer(message.payloadString);
     
-    console.log(this.messagesBuffer);
+    console.log(this.locationBuffer);
   }
 
 
@@ -94,6 +104,35 @@ export class MqttClientProvider {
     let motion_status = Number.parseInt(messageSplit[2]);
     let battery_status = Number.parseInt(messageSplit[3]);
 
-    this.messagesBuffer = Object.assign(this.messagesBuffer, { [location]: { timestamp, location, motion_status, battery_status }});
+    this.locationBuffer = Object.assign(this.locationBuffer, { [location]: { timestamp, location, motion_status, battery_status }});
+
+    if(motion_status === 1) {
+      for(let lastSeenLocation of this.lastSeenLocations) {
+        //console.log('lastSeenLocation: ', lastSeenLocation);
+        //console.log('timestamp:', timestamp);
+        //console.log('lastSeenLocation.timestamp: ', lastSeenLocation.timestamp);
+        //console.log('timestamp.isAfter(lastSeenLocation.timestamp): ', timestamp.isAfter(lastSeenLocation.timestamp));
+        if(timestamp.isAfter(lastSeenLocation.timestamp)) {
+          this.lastSeenLocations = [{ timestamp, location, motion_status, battery_status }];
+          return;
+        }
+      }
+      this.lastSeenLocations.push({ timestamp, location, motion_status, battery_status });
+    }
+  }
+
+  prettifyLocation(location: string): string {
+    if(!location) {
+      return null;
+    }
+
+    // Capitalise first letter of Location name
+    let str: string = location.charAt(0).toUpperCase() + location.slice(1);
+
+    if(location === 'living' || location === 'dining') {
+      return str + " Room";
+    } else {
+      return str;
+    }
   }
 }

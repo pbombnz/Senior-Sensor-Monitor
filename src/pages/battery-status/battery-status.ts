@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 
@@ -8,12 +8,15 @@ import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 })
 export class BatteryStatusPage {
   objectKeys = Object.keys;
+  lastRefreshed: number;
+  
+  private timer: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public mqtt: MqttClientProvider) {
+  constructor(public navCtrl: NavController, private changeDetectorRef: ChangeDetectorRef, public navParams: NavParams, public mqtt: MqttClientProvider) {
+    this.changeDetectorRef.detach();
+    this.timer = setInterval(_ => {
+      this.lastRefreshed = Date.now();
+      this.changeDetectorRef.detectChanges();
+    }, 1000);
   }
-
-  capitalize(str: string) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
 }

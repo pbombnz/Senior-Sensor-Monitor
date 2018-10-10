@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 
@@ -8,5 +8,19 @@ import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 })
 
 export class SeniorStatusPage {
-  constructor(public navCtrl: NavController, public mqtt: MqttClientProvider) {}
+  lastRefreshed: number;
+
+  private timer: number;
+
+  constructor(public navCtrl: NavController, private changeDetectorRef: ChangeDetectorRef, public mqtt: MqttClientProvider) {
+    this.changeDetectorRef.detach();
+    this.timer = setInterval(_ => {
+      this.lastRefreshed = Date.now();
+      this.changeDetectorRef.detectChanges();
+    }, 1000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.timer);
+  }
 }
