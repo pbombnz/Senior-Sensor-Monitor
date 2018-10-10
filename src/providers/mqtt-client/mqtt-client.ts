@@ -1,73 +1,97 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 declare var Paho: any;
 
 @Injectable()
 export class MqttClientProvider {
-  mqttStatus: string = 'Disconnected';
-  mqttClient: any = null;
+  status: string = 'Disconnected';
+  client: any = null;
   message: any = '';
   messageToSend: string = 'Your message';
   topic: string = 'swen325/a3';
-  clientId: string = 'bhikhupras'
+  clientId: string = 'bhikhupras';
+
+  messagesBuffer: any = {};
 
   constructor() {
 
   }
 
   public connect = () => {
-  	this.mqttStatus = 'Connecting...';
-  	//this.mqttClient = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
-  	this.mqttClient = new Paho.MQTT.Client('barretts.ecs.vuw.ac.nz', 8883, '/mqtt', this.clientId);
+  	this.status = 'Connecting...';
+  	//this.client = new Paho.MQTT.Client('m10.cloudmqtt.com', 31796, '/mqtt', this.clientId);
+  	this.client = new Paho.MQTT.Client('barretts.ecs.vuw.ac.nz', 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers
-	this.mqttClient.onConnectionLost = this.onConnectionLost;
-	this.mqttClient.onMessageArrived = this.onMessageArrived;
+	this.client.onConnectionLost = this.onConnectionLost;
+	this.client.onMessageArrived = this.onMessageArrived;
 
 	// connect the client
 	console.log('Connecting to mqtt via websocket');
-	//this.mqttClient.connect({timeout:10, userName:'ptweqash', password:'ncU6vlGPp1mN', useSSL:true, onSuccess:this.onConnect, onFailure:this.onFailure});
-	this.mqttClient.connect({timeout:10, useSSL:false, onSuccess:this.onConnect, onFailure:this.onFailure});
+	//this.client.connect({timeout:10, userName:'ptweqash', password:'ncU6vlGPp1mN', useSSL:true, onSuccess:this.onConnect, onFailure:this.onFailure});
+	this.client.connect({timeout:10, useSSL:false, onSuccess:this.onConnect, onFailure:this.onFailure});
   }
 
   public disconnect () {
-  	if(this.mqttStatus == 'Connected') {
-  		this.mqttStatus = 'Disconnecting...';
-  		this.mqttClient.disconnect();
-  		this.mqttStatus = 'Disconnected';
+  	if(this.status == 'Connected') {
+  		this.status = 'Disconnecting...';
+      this.client.disconnect();
+      this.messagesBuffer = {};
+  		this.status = 'Disconnected';
   	}
   }
 
   public sendMessage () {
-  	if(this.mqttStatus == 'Connected') {
-  		this.mqttClient.publish(this.topic, this.messageToSend);
+  	if(this.status == 'Connected') {
+  		this.client.publish(this.topic, this.messageToSend);
   	}
   }
 
   public onConnect = () => {
-  	console.log('Connected');
-  	this.mqttStatus = 'Connected';
+  	console.log('Connecting/Connected - Subscribing');
 
   	// subscribe
-	this.mqttClient.subscribe(this.topic, {
-		onSuccess: () => console.log('subscribe ok'),
-		onFailure: () => console.log('subscribe failed')
+	this.client.subscribe(this.topic, {
+		onSuccess: () => {
+      console.log('Connected - Subscribe Suceeded');
+      this.status = 'Connected';
+    },
+		onFailure: (responseObject) => {
+      console.log('Connected - Subscribe Failed');
+      this.onFailure(responseObject);
+    }
 	});
   }
 
   public onFailure = (responseObject) => {
   	console.log('Failed to connect');
-  	this.mqttStatus = 'Failed to connect';
+  	this.status = 'Failed to connect';
   }
 
   public onConnectionLost = (responseObject) => {
    	if (responseObject.errorCode !== 0) {
-   		this.mqttStatus = 'Disconnected';
+   		this.status = 'Disconnected';
   	} 	
   }
 
   public onMessageArrived = (message) => {
   	console.log('Received message: ', message.payloadString);
-  	this.message = message.payloadString;
+    this.message = message.payloadString;
+    this.addMessageToBuffer(message.payloadString);
+    
+    console.log(this.messagesBuffer);
+  }
+
+
+  public addMessageToBuffer(message) {
+    let messageSplit: string[] = message.split(',');
+    
+    let date = moment(messageSplit[0]);
+    let room = messageSplit[1];
+    let motion = Number.parseInt(messageSplit[2]);
+    let batteryPercentage = Number.parseInt(messageSplit[3]);
+
+    this.messagesBuffer = Object.assign(this.messagesBuffer, { [room]: { date, room, motion, batteryPercentage }});
   }
 }
