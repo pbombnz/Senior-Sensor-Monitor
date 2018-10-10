@@ -12,10 +12,6 @@ export class BatteryStatusPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public mqtt: MqttClientProvider) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad BatteryStatusPage');
-  }
-
   capitalize(str: string) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
