@@ -64,7 +64,26 @@
           </div>
         </ion-col>
         <ion-col>
-          <ion-grid>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Location</th>
+                <th scope="col"># of Motion Detected</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="!mqtt.motionActivity_count">
+              <tr>
+                <td class="text-center" colspan="2">No Motion detected yet.</td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="mqtt.motionActivity_count">
+              <tr *ngFor="let location of objectKeys(mqtt.motionActivity_count)">
+                <th scope="row">{{location}}</th>
+                <td>{{mqtt.motionActivity_count[location]}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!--ion-grid>
             <ion-row>
               <ion-col style="border: grey 1px solid; font-weight: bold;">Location</ion-col>
               <ion-col style="border: grey 1px solid; font-weight: bold;"># of Motion Detected</ion-col>
@@ -78,7 +97,7 @@
                 <ion-col style="border: grey 1px solid;">{{mqtt.motionActivity_count[location]}}</ion-col>
               </ng-template>
             </ion-row>
-          </ion-grid>
+          </ion-grid -->
         </ion-col>
       </ion-row>
     </ion-card-content>
