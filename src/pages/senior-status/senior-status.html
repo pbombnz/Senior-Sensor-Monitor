@@ -37,18 +37,50 @@
     <button ion-button (click)="mqtt.disconnect()">Disconnect</button>
   </ion-row>
 
-  <ion-card >
-    <ion-card-header><h2>Last Seen</h2></ion-card-header>
-    <ion-card-content *ngIf="mqtt.lastSeenLocations && mqtt.lastSeenLocations.length > 0">
-      <ion-card *ngFor="let lastSeenLocation of mqtt.lastSeenLocations">
+  <ion-card>
+    <ion-card-header>
+      <h2>Last Seen</h2>
+    </ion-card-header>
+    <ion-card-content *ngIf="mqtt.locationBuffer_lastSeen && mqtt.locationBuffer_lastSeen.length > 0">
+      <ion-card *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
         <ion-card-content>
           {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}
         </ion-card-content>
       </ion-card>
     </ion-card-content>
-    <ion-card-content *ngIf="!mqtt.lastSeenLocations || mqtt.lastSeenLocations.length == 0">
-      No detected movement since {{mqtt.startDate.fromNow()}}.
+    <ion-card-content *ngIf="!mqtt.locationBuffer_lastSeen || mqtt.locationBuffer_lastSeen.length == 0">
+      No detected movement since {{mqtt.noMotionTimer.fromNow()}}.
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <h2>Motion Activity</h2>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-row>
+        <ion-col>
+          <div id="heatmap" style="margin: auto; width: 370px; height: 208px; background-image: url('assets/imgs/house.jpg'); background-repeat:no-repeat; background-size:contain;">
+          </div>
+        </ion-col>
+        <ion-col>
+          <ion-grid>
+            <ion-row>
+              <ion-col style="border: grey 1px solid; font-weight: bold;">Location</ion-col>
+              <ion-col style="border: grey 1px solid; font-weight: bold;"># of Motion Detected</ion-col>
+            </ion-row>
+            <ion-row *ngIf="!mqtt.motionActivity_count">
+              <ion-col text-center style="border: grey 1px solid;">No Motion detected yet.</ion-col>
+            </ion-row>
+            <ion-row *ngIf="mqtt.motionActivity_count">
+              <ng-template *ngFor="let location of objectKeys(mqtt.motionActivity_count)">
+                <ion-col style="border: grey 1px solid;">{{location}}</ion-col>
+                <ion-col style="border: grey 1px solid;">{{mqtt.motionActivity_count[location]}}</ion-col>
+              </ng-template>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
