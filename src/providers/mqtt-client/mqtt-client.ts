@@ -42,10 +42,17 @@ export class MqttClientProvider {
   constructor() {
   }
 
+  getNoMotionTimer(): moment.Moment {
+    if (this.locationBuffer_lastSeen && this.locationBuffer_lastSeen.length > 0) {
+      return this.locationBuffer_lastSeen[0].timestamp;
+    }
+    return this.noMotionTimer;
+  }
+
   public connect = () => {
   	this.status = 'Connecting...';
     let host = 'barretts.ecs.vuw.ac.nz';
-    //host = 'localhost';
+    host = 'localhost';
   	this.client = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers

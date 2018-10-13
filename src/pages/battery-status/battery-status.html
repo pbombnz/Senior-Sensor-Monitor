@@ -5,7 +5,7 @@
 
 </ion-header>
 <ion-content>
-  <div *ngIf="mqtt?.status !== 'Connected';then disconnected_content else connected_content"></div>
+  <div *ngIf="mqtt?.status !== 'Connected' && mqtt.locationBuffer.length === 0;then disconnected_content else connected_content"></div>
 </ion-content>
 
 <!-- Display a message to the user that no data is available at the current moment -->
@@ -33,7 +33,7 @@
   <ion-card *ngFor="let location of objectKeys(mqtt.locationBuffer)">
     <ion-item>
       <ion-row>
-        <ion-col>
+        <ion-col style="margin-left: 4px">
           <h2>{{mqtt.prettifyLocation(location)}}</h2>
           <ion-note>Updated {{mqtt.locationBuffer[location].timestamp.fromNow()}}</ion-note>
         </ion-col>

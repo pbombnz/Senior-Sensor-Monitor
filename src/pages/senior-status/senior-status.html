@@ -64,7 +64,7 @@
           </div>
         </ion-col>
         <ion-col>
-          <table class="table table-striped">
+          <table class="pure-table pure-table-horizontal" style="width: 100%" >
             <thead>
               <tr>
                 <th scope="col">Location</th>
@@ -73,7 +73,7 @@
             </thead>
             <tbody *ngIf="!mqtt.motionActivity_count">
               <tr>
-                <td class="text-center" colspan="2">No Motion detected yet.</td>
+                <td style="text-align: center;" colspan="2">No Motion detected yet.</td>
               </tr>
             </tbody>
             <tbody *ngIf="mqtt.motionActivity_count">
