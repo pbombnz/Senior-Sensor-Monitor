@@ -1,0 +1,25 @@
+<!--
+  Generated template for the SettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-content>Status: <b>{{mqtt.status}}</b></ion-card-content>
+  </ion-card>
+
+  <ion-row justify-content-center align-items-center>
+    <button ion-button (click)="mqtt.status === 'Disconnected' ? mqtt.connect() : mqtt.disconnect()">{{mqtt.status === 'Disconnected' ? 'Connect' : 'Disconnect'}}</button>
+  </ion-row>
+
+</ion-content>

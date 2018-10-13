@@ -28,14 +28,14 @@
 </ion-content -->
 <ion-content padding>
 
-  <ion-card>
+  <!--ion-card>
     <ion-card-content>Status: <b>{{mqtt.status}}</b></ion-card-content>
   </ion-card>
 
   <ion-row justify-content-center align-items-center>
     <button ion-button (click)="mqtt.connect()">Connect</button>
     <button ion-button (click)="mqtt.disconnect()">Disconnect</button>
-  </ion-row>
+  </ion-row-->
 
   <ion-card>
     <ion-card-header>
@@ -71,15 +71,15 @@
                 <th scope="col"># of Motion Detected</th>
               </tr>
             </thead>
-            <tbody *ngIf="!mqtt.motionActivity_count">
+            <tbody *ngIf="!mqtt.motionActivity_count || objectKeys(mqtt.motionActivity_count).length === 0">
               <tr>
                 <td style="text-align: center;" colspan="2">No Motion detected yet.</td>
               </tr>
             </tbody>
-            <tbody *ngIf="mqtt.motionActivity_count">
+            <tbody *ngIf="mqtt.motionActivity_count && objectKeys(mqtt.motionActivity_count).length > 0">
               <tr *ngFor="let location of objectKeys(mqtt.motionActivity_count)">
-                <th scope="row">{{location}}</th>
-                <td>{{mqtt.motionActivity_count[location]}}</td>
+                <th scope="row">{{mqtt.prettifyLocation(location)}}</th>
+                <td text-center>{{mqtt.motionActivity_count[location]}}</td>
               </tr>
             </tbody>
           </table>

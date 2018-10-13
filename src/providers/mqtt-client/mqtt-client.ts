@@ -39,6 +39,9 @@ export class MqttClientProvider {
    */
   motionActivity_count: any;
 
+
+  isFirstRun = true;
+
   constructor() {
   }
 
@@ -88,9 +91,12 @@ export class MqttClientProvider {
       this.status = 'Connected';
 
       // Checks if this is NOT the first time, that way we can reset the last seen timer.
-      if(this.locationBuffer && this.locationBuffer_lastSeen) {
+      if(!this.isFirstRun) {
         this.noMotionTimer = moment();
+      } else {
+        this.isFirstRun = false;
       }
+
       this.locationBuffer = {};
       this.locationBuffer_lastSeen = [];
       this.motionActivity_heatmapData = [];
@@ -105,7 +111,7 @@ export class MqttClientProvider {
 
   public onFailure = (responseObject) => {
   	console.log('Failed to connect');
-  	this.status = 'Failed to connect';
+    this.status = 'Failed to connect';
   }
 
   public onConnectionLost = (responseObject) => {

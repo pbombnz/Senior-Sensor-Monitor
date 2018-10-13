@@ -9,12 +9,14 @@ import { MyApp } from './app.component';
 import { SeniorStatusPage } from '../pages/senior-status/senior-status';
 import { BatteryStatusPage } from '../pages/battery-status/battery-status';
 import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
+import { SettingsPage } from '../pages/settings/settings';
 
 @NgModule({
   declarations: [
     MyApp,
     SeniorStatusPage,
-    BatteryStatusPage
+    BatteryStatusPage,
+    SettingsPage,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +28,7 @@ import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
     MyApp,
     SeniorStatusPage,
     BatteryStatusPage,
+    SettingsPage,
   ],
   providers: [
     StatusBar,

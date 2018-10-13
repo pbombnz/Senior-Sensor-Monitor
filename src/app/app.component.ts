@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { BatteryStatusPage } from '../pages/battery-status/battery-status';
 import { SeniorStatusPage } from '../pages/senior-status/senior-status';
+import { SettingsPage } from '../pages/settings/settings';
 import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
 
 import * as moment from 'moment';
@@ -19,10 +20,11 @@ export class MyApp {
 
   tab1Root:any = SeniorStatusPage;
   tab2Root:any = BatteryStatusPage;
+  tab3Root:any = SettingsPage;
 
   isAlertOpen = false;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, mqtt: MqttClientProvider, public alertCtrl: AlertController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public mqtt: MqttClientProvider, public alertCtrl: AlertController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -30,6 +32,8 @@ export class MyApp {
       splashScreen.hide();
 
       // Do stuff here
+      mqtt.connect();
+
       let sub = Observable.interval(60000).subscribe((val) => { 
         console.log('called'); 
         let noMotionSinceTime: moment.Moment = mqtt.getNoMotionTimer();
