@@ -56,7 +56,12 @@ export class MqttClientProvider {
   /**
    * The number of milliseconds that the timer waits to be called again. Defaults to 60000 (1 minute).
    */
-  noMotionTimer_interval: number = 10000;
+  noMotionTimer_interval: number = 60000;
+
+  /**
+   * 
+   */
+  noMotionTimer_durationOfNoMotion_minutes: number = 5; 
 
   /**
    * 
@@ -75,7 +80,7 @@ export class MqttClientProvider {
     let nowTime: moment.Moment = moment();
 
     console.log("nowTime.diff(noMotionSinceTime, 'minutes'): ", nowTime.diff(noMotionSinceTime, 'minutes'));
-    if (nowTime.diff(noMotionSinceTime, 'minutes') >= 0) {
+    if (nowTime.diff(noMotionSinceTime, 'minutes') >= this.noMotionTimer_durationOfNoMotion_minutes) {
       if(this.onNoMotionDetected) {
         this.onNoMotionDetected();
       }
@@ -92,7 +97,7 @@ export class MqttClientProvider {
   public connect = () => {
   	this.status = 'Connecting...';
     let host = 'barretts.ecs.vuw.ac.nz';
-    host = 'localhost';
+    //host = 'localhost';
   	this.client = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers
