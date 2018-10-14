@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
 
 declare var Paho: any;
 
@@ -27,7 +30,7 @@ export class MqttClientProvider {
    * started, the application will use this time to determine how long the individual has
    * not been detected for.
    */
-  noMotionTimer: moment.Moment = moment();
+  noMotionDetectedTime: moment.Moment = moment();
 
   /**
    * Data to help visualise motion on a Heatmap.
@@ -39,17 +42,51 @@ export class MqttClientProvider {
    */
   motionActivity_count: any;
 
-
+  /**
+   * Checks if the MQTT is running on its first run/ when the application launched and not
+   * restarted by the user.
+   */
   isFirstRun = true;
 
+  /**
+   * 
+   */
+  noMotionTimer: Subscription;
+
+  /**
+   * The number of milliseconds that the timer waits to be called again. Defaults to 60000 (1 minute).
+   */
+  noMotionTimer_interval: number = 10000;
+
+  /**
+   * 
+   */
+  onNoMotionDetected: Function;
+
   constructor() {
+    this.noMotionTimer = Observable.interval(this.noMotionTimer_interval)
+    .subscribe((val) => { 
+      this._onNoMotionDetected();
+    });
   }
 
-  getNoMotionTimer(): moment.Moment {
+  private _onNoMotionDetected() {
+    let noMotionSinceTime: moment.Moment = this.getNoMotionDetectedTime();
+    let nowTime: moment.Moment = moment();
+
+    console.log("nowTime.diff(noMotionSinceTime, 'minutes'): ", nowTime.diff(noMotionSinceTime, 'minutes'));
+    if (nowTime.diff(noMotionSinceTime, 'minutes') >= 0) {
+      if(this.onNoMotionDetected) {
+        this.onNoMotionDetected();
+      }
+    }
+  }
+
+  getNoMotionDetectedTime(): moment.Moment {
     if (this.locationBuffer_lastSeen && this.locationBuffer_lastSeen.length > 0) {
       return this.locationBuffer_lastSeen[0].timestamp;
     }
-    return this.noMotionTimer;
+    return this.noMotionDetectedTime;
   }
 
   public connect = () => {
@@ -92,7 +129,7 @@ export class MqttClientProvider {
 
       // Checks if this is NOT the first time, that way we can reset the last seen timer.
       if(!this.isFirstRun) {
-        this.noMotionTimer = moment();
+        this.noMotionDetectedTime = moment();
       } else {
         this.isFirstRun = false;
       }
@@ -152,7 +189,7 @@ export class MqttClientProvider {
 
       if(freshMotion) {
         this.locationBuffer_lastSeen = [{ timestamp, location, motion_status, battery_status }];
-        this.noMotionTimer = timestamp;
+        this.noMotionDetectedTime = timestamp;
       } else {
         this.locationBuffer_lastSeen.push({ timestamp, location, motion_status, battery_status });
       }

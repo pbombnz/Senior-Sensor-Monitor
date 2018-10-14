@@ -2,6 +2,7 @@ import { Component  } from '@angular/core';
 import { Platform, AlertController  } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { LocalNotifications  } from '@ionic-native/local-notifications';
 
 
 import { BatteryStatusPage } from '../pages/battery-status/battery-status';
@@ -9,9 +10,7 @@ import { SeniorStatusPage } from '../pages/senior-status/senior-status';
 import { SettingsPage } from '../pages/settings/settings';
 import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
 
-import * as moment from 'moment';
-import 'rxjs/add/observable/interval';
-import { Observable } from 'rxjs/Observable';
+//import * as moment from 'moment';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +23,7 @@ export class MyApp {
 
   isAlertOpen = false;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public mqtt: MqttClientProvider, public alertCtrl: AlertController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, public mqtt: MqttClientProvider, public alertCtrl: AlertController, private localNotifications: LocalNotifications) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -33,17 +32,21 @@ export class MyApp {
 
       // Do stuff here
       mqtt.connect();
-
-      let sub = Observable.interval(60000).subscribe((val) => { 
-        console.log('called'); 
-        let noMotionSinceTime: moment.Moment = mqtt.getNoMotionTimer();
-        let nowTime: moment.Moment = moment();
-        console.log(nowTime.diff(noMotionSinceTime, 'minutes'));
-        if (nowTime.diff(noMotionSinceTime, 'minutes') >= 5) {
-          this.showAlert();
-        }
-      });
+      mqtt.onNoMotionDetected = this.onNoMotionDetected.bind(this);
     });
+  }
+
+  onNoMotionDetected() {
+    this.scheduleNotification();
+    this.showAlert();
+  }
+
+  scheduleNotification() {
+    this.localNotifications.schedule({
+      id: 1,
+      title: 'Prolonged inactivity for the Last 5 minutes',
+      text: 'Its suggested to ring emergency services if the individual is not available in attempts to contact them.',
+    })
   }
 
   showAlert() {
@@ -52,8 +55,9 @@ export class MyApp {
     }
 
     let alert = this.alertCtrl.create({
-      title: 'Prolonged inactivity',
-      subTitle: 'No motion has been detected for the last 5 minutes. Please contact the individual for safety.\n\nIts suggested to ring emergency services if the individual is not available.',
+      title: 'Prolonged Inactivity',
+      subTitle: 'No motion has been detected for the last 5 minutes',
+      message: 'Please contact the individual for safety.\n\nIts suggested to ring emergency services if the individual is not available.',
       buttons: ['OK']
     });
 

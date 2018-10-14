@@ -49,7 +49,7 @@
       </ion-card>
     </ion-card-content>
     <ion-card-content *ngIf="!mqtt.locationBuffer_lastSeen || mqtt.locationBuffer_lastSeen.length == 0">
-      No detected movement since {{mqtt.noMotionTimer.fromNow()}}.
+      No detected movement since {{mqtt.getNoMotionDetectedTime().fromNow()}}.
     </ion-card-content>
   </ion-card>
 
