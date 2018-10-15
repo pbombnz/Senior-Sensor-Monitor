@@ -37,8 +37,10 @@
           <h2>{{mqtt.prettifyLocation(location)}}</h2>
           <ion-note>Updated {{mqtt.locationBuffer[location].timestamp.fromNow()}}</ion-note>
         </ion-col>
+
         <ion-col align-self-center text-right>
-          <h2>{{mqtt.locationBuffer[location].battery_status}}%</h2>
+          <h2 [ngStyle]="{ 'color' : batteryPercentageColor(mqtt.locationBuffer[location].battery_status) }">{{mqtt.locationBuffer[location].battery_status}}%</h2>
+          <p>{{batteryPercentageText(mqtt.locationBuffer[location].battery_status)}}</p>
         </ion-col>
       </ion-row>
     </ion-item>

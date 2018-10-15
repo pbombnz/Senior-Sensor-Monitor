@@ -11,18 +11,12 @@ declare const h337: any;
 export class SeniorStatusPage {
   objectKeys = Object.keys;
 
-  lastRefreshed: number;
-
-  private timer: number;
+  private changeDetectorTimer: number;
   private heatmap;
 
   constructor(public navCtrl: NavController, private changeDetectorRef: ChangeDetectorRef, public mqtt: MqttClientProvider) {
     this.changeDetectorRef.detach();
-    this.timer = setInterval(_ => {
-      this.lastRefreshed = Date.now();
-
-      //let d = Object.assign(this.generateHousePos(), { value: this.getRandomInt(1,10)});
-      //this.heatmap.addData(d);
+    this.changeDetectorTimer = setInterval(_ => {
       if(this.heatmap && this.mqtt.motionActivity_heatmapData) {
         this.heatmap.setData({
           data: this.mqtt.motionActivity_heatmapData
@@ -31,6 +25,10 @@ export class SeniorStatusPage {
 
       this.changeDetectorRef.detectChanges();
     }, 1000);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.changeDetectorTimer);
   }
 
   ngAfterViewInit() {
@@ -46,9 +44,5 @@ export class SeniorStatusPage {
         {x: 90, y: 210, value: 1}, // Bedroom
        ]
     });*/
-  }
-
-  ngOnDestroy() {
-    clearInterval(this.timer);
   }
 }

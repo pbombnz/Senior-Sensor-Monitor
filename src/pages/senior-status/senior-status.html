@@ -39,14 +39,19 @@
 
   <ion-card>
     <ion-card-header>
-      <h2>Last Seen</h2>
+      <h2>Latest Motion Detected</h2>
     </ion-card-header>
     <ion-card-content *ngIf="mqtt.locationBuffer_lastSeen && mqtt.locationBuffer_lastSeen.length > 0">
-      <ion-card *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
+      <ion-list>
+        <ion-item *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
+            {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}
+        </ion-item> 
+      </ion-list>
+      <!-- ion-card *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
         <ion-card-content>
           {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}
         </ion-card-content>
-      </ion-card>
+      </ion-card-->
     </ion-card-content>
     <ion-card-content *ngIf="!mqtt.locationBuffer_lastSeen || mqtt.locationBuffer_lastSeen.length == 0">
       No detected movement since {{mqtt.getNoMotionDetectedTime().fromNow()}}.

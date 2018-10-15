@@ -49,9 +49,12 @@ export class MqttClientProvider {
   isFirstRun = true;
 
   /**
-   * 
+   * The obverable that gets called every interval to check if no motion has been detected for 
+   * a specified amount of minutes
    */
   noMotionTimer: Subscription;
+
+
 
   /**
    * The number of milliseconds that the timer waits to be called again. Defaults to 60000 (1 minute).
@@ -69,8 +72,11 @@ export class MqttClientProvider {
   onNoMotionDetected: Function;
 
   constructor() {
-    this.noMotionTimer = Observable.interval(this.noMotionTimer_interval)
-    .subscribe((val) => { 
+    this.createNoMotionTimer();
+  }
+
+  private createNoMotionTimer() {
+    this.noMotionTimer = Observable.interval(this.noMotionTimer_interval).subscribe((val) => { 
       this._onNoMotionDetected();
     });
   }
@@ -133,11 +139,13 @@ export class MqttClientProvider {
       this.status = 'Connected';
 
       // Checks if this is NOT the first time, that way we can reset the last seen timer.
-      if(!this.isFirstRun) {
+      //if(!this.isFirstRun) {
         this.noMotionDetectedTime = moment();
-      } else {
-        this.isFirstRun = false;
-      }
+      //} else {
+      //  this.isFirstRun = false;
+      //}
+      this.noMotionTimer.unsubscribe();
+      this.createNoMotionTimer();
 
       this.locationBuffer = {};
       this.locationBuffer_lastSeen = [];
