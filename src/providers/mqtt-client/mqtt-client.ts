@@ -103,7 +103,7 @@ export class MqttClientProvider {
   public connect = () => {
   	this.status = 'Connecting...';
     let host = 'barretts.ecs.vuw.ac.nz';
-    host = 'localhost';
+    //host = 'localhost';
   	this.client = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers
