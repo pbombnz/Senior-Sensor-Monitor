@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { MqttClientProvider } from '../../providers/mqtt-client/mqtt-client';
 
 declare const h337: any;
@@ -14,7 +14,7 @@ export class SeniorStatusPage {
   private changeDetectorTimer: number;
   private heatmap;
 
-  constructor(public navCtrl: NavController, private changeDetectorRef: ChangeDetectorRef, public mqtt: MqttClientProvider) {
+  constructor(public navCtrl: NavController, public platform: Platform, private changeDetectorRef: ChangeDetectorRef, public mqtt: MqttClientProvider) {
     this.changeDetectorRef.detach();
     this.changeDetectorTimer = setInterval(_ => {
       if(this.heatmap && this.mqtt.motionActivity_heatmapData) {

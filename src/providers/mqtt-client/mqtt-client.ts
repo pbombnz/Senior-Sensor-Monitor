@@ -103,7 +103,7 @@ export class MqttClientProvider {
   public connect = () => {
   	this.status = 'Connecting...';
     let host = 'barretts.ecs.vuw.ac.nz';
-    //host = 'localhost';
+    host = 'localhost';
   	this.client = new Paho.MQTT.Client(host, 8883, '/mqtt', this.clientId);
  	
 	// set callback handlers
@@ -218,6 +218,15 @@ export class MqttClientProvider {
     } else {
       this.motionActivity_count[location] = 1;
     }
+
+    // Sort storage structure so the chart is in descending order based on # of motion detected in a zone.
+    let toPairs = s => Object.keys(s).map(k => [k, s[k]]);
+    let fromPairs = a => a.reduce((s, [k, v]) => Object.assign(s, {[k]: v}), {});
+    let cmp = (a: number, b: number) => (a - b);
+    let cmpStr = (a: string, b: string) => b.localeCompare(a);
+
+    this.motionActivity_count = fromPairs(
+        toPairs(this.motionActivity_count).sort((x, y) => cmp(y[1], x[1]) || cmpStr(y[0], x[0])))
   }
 
   prettifyLocation(location: string): string {

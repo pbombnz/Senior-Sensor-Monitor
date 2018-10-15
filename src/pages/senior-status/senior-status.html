@@ -62,9 +62,9 @@
     <ion-card-header>
       <h2>Motion Activity</h2>
     </ion-card-header>
-    <ion-card-content>
+    <ion-card-content [ngStyle]="{'padding-left': (platform.width() < 420) ? '0px' : '16px', 'padding-right': (platform.width() < 420) ? '0px' : '16px' }">
       <ion-row>
-        <ion-col>
+        <ion-col no-padding>
           <div id="heatmap" style="margin: auto; width: 370px; height: 208px; background-image: url('assets/imgs/house.jpg'); background-repeat:no-repeat; background-size:contain;">
           </div>
         </ion-col>
