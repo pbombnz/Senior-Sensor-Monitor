@@ -4,7 +4,8 @@
   </ion-navbar>
 
 </ion-header>
-<ion-content>
+<ion-content padding style="background-color: gainsboro">
+  <mqtt-status></mqtt-status>
   <div *ngIf="mqtt?.status !== 'Connected' && mqtt.locationBuffer.length === 0;then disconnected_content else connected_content"></div>
 </ion-content>
 
@@ -39,7 +40,7 @@
         </ion-col>
 
         <ion-col align-self-center text-right>
-          <h2 [ngStyle]="{ 'color' : batteryPercentageColor(mqtt.locationBuffer[location].battery_status) }">{{mqtt.locationBuffer[location].battery_status}}%</h2>
+          <h2 [ngStyle]="{ 'color' : batteryPercentageColor(mqtt.locationBuffer[location].battery_status), 'text-shadow': '0 0 2px #AAA'}">{{mqtt.locationBuffer[location].battery_status}}%</h2>
           <p>{{batteryPercentageText(mqtt.locationBuffer[location].battery_status)}}</p>
         </ion-col>
       </ion-row>

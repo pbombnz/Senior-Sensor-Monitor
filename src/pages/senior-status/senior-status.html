@@ -26,38 +26,10 @@
   <ion-textarea [(ngModel)]='mqtt.messageToSend'>{{mqtt.messageToSend}}</ion-textarea>
   <button ion-button full (click)="mqtt.sendMessage()">Send Message</button>
 </ion-content -->
-<ion-content padding>
+<ion-content padding style="background-color: gainsboro">
+  <mqtt-status></mqtt-status>
 
-  <!--ion-card>
-    <ion-card-content>Status: <b>{{mqtt.status}}</b></ion-card-content>
-  </ion-card>
-
-  <ion-row justify-content-center align-items-center>
-    <button ion-button (click)="mqtt.connect()">Connect</button>
-    <button ion-button (click)="mqtt.disconnect()">Disconnect</button>
-  </ion-row-->
-
-  <ion-card>
-    <ion-card-header>
-      <h2>Latest Motion Detected</h2>
-    </ion-card-header>
-    <ion-card-content *ngIf="mqtt.locationBuffer_lastSeen && mqtt.locationBuffer_lastSeen.length > 0">
-      <ion-list>
-        <ion-item *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
-            {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}
-        </ion-item> 
-      </ion-list>
-      <!-- ion-card *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
-        <ion-card-content>
-          {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}
-        </ion-card-content>
-      </ion-card-->
-    </ion-card-content>
-    <ion-card-content *ngIf="!mqtt.locationBuffer_lastSeen || mqtt.locationBuffer_lastSeen.length == 0">
-      No detected movement since {{mqtt.getNoMotionDetectedTime().fromNow()}}.
-    </ion-card-content>
-  </ion-card>
-
+  <!-- Motion Activity -->
   <ion-card>
     <ion-card-header>
       <h2>Motion Activity</h2>
@@ -69,7 +41,7 @@
           </div>
         </ion-col>
         <ion-col>
-          <table class="pure-table pure-table-horizontal" style="width: 100%" >
+          <table class="pure-table pure-table-horizontal" style="width: 100%">
             <thead>
               <tr>
                 <th scope="col">Location</th>
@@ -88,23 +60,25 @@
               </tr>
             </tbody>
           </table>
-          <!--ion-grid>
-            <ion-row>
-              <ion-col style="border: grey 1px solid; font-weight: bold;">Location</ion-col>
-              <ion-col style="border: grey 1px solid; font-weight: bold;"># of Motion Detected</ion-col>
-            </ion-row>
-            <ion-row *ngIf="!mqtt.motionActivity_count">
-              <ion-col text-center style="border: grey 1px solid;">No Motion detected yet.</ion-col>
-            </ion-row>
-            <ion-row *ngIf="mqtt.motionActivity_count">
-              <ng-template *ngFor="let location of objectKeys(mqtt.motionActivity_count)">
-                <ion-col style="border: grey 1px solid;">{{location}}</ion-col>
-                <ion-col style="border: grey 1px solid;">{{mqtt.motionActivity_count[location]}}</ion-col>
-              </ng-template>
-            </ion-row>
-          </ion-grid -->
         </ion-col>
       </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Last Seen -->
+  <ion-card>
+    <ion-card-header>
+      <h2>Latest Motion Detected</h2>
+    </ion-card-header>
+    <ion-card-content *ngIf="mqtt.locationBuffer_lastSeen && mqtt.locationBuffer_lastSeen.length > 0">
+      <ion-list>
+        <div *ngFor="let lastSeenLocation of mqtt.locationBuffer_lastSeen">
+          {{mqtt.prettifyLocation(lastSeenLocation?.location)}} about {{lastSeenLocation?.timestamp.fromNow()}}.
+        </div>
+      </ion-list>
+    </ion-card-content>
+    <ion-card-content *ngIf="!mqtt.locationBuffer_lastSeen || mqtt.locationBuffer_lastSeen.length == 0">
+      No detected movement since {{mqtt.getNoMotionDetectedTime().fromNow()}}.
     </ion-card-content>
   </ion-card>
 </ion-content>

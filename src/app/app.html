@@ -1,27 +1,27 @@
 <!--ion-nav [root]="rootPage"></ion-nav-->
 
-<div style="height: 100%" *ngIf="mqtt.status === 'Connecting...'">
-  <ion-row align-items-center style="height: 100%">
-    <ion-col text-center>
-      <ion-spinner></ion-spinner>
-      <h1>Connecting to sensors...</h1>
-    </ion-col>
-  </ion-row>
+<div style="height: 100%" *ngIf="mqtt.status === 'Failed to connect' || mqtt.status === 'Connecting...'">
+  <ion-header>
+    <ion-navbar>
+      <ion-title>Eldery Monitor</ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content padding>
+    <mqtt-status></mqtt-status>
+    <ion-row align-items-center style="min-height: 80%; max-height: 95%">
+      <ion-col text-center>
+        <ion-spinner></ion-spinner>
+        <!-- h1 *ngIf="mqtt.status === 'Failed to connect'">Failed to connect to sensors. Retrying...</h1>
+        <h1 *ngIf="mqtt.status === 'Connecting...'">Connecting to sensors...</h1 -->
+      </ion-col>
+    </ion-row>
+  </ion-content>
 </div>
-
-<div style="height: 100%" *ngIf="mqtt.status === 'Failed to connect'">
-        <ion-row align-items-center style="height: 100%">
-          <ion-col text-center>
-            <ion-spinner></ion-spinner>
-            <h1>Failed to connect to sensors. Retrying...</h1>
-          </ion-col>
-        </ion-row>
-      </div>
 
 <div *ngIf="mqtt.status === 'Connected' ||  mqtt.status === 'Disconnecting...' || mqtt.status === 'Disconnected'">
   <ion-tabs tabsPlacement="bottom">
-    <ion-tab [root]="tab1Root" tabTitle="Senior Status" tabIcon="compass"></ion-tab>
+    <ion-tab [root]="tab1Root" tabTitle="Senior Status" tabIcon="walk"></ion-tab>
     <ion-tab [root]="tab2Root" tabTitle="Battery Status" tabIcon="battery-full"></ion-tab>
-    <ion-tab [root]="tab3Root" tabTitle="Settings" tabIcon="settings"></ion-tab>
+    <!--ion-tab [root]="tab3Root" tabTitle="Settings" tabIcon="settings"></ion-tab -->
   </ion-tabs>
 </div>

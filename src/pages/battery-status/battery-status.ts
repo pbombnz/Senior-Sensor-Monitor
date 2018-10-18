@@ -47,9 +47,9 @@ export class BatteryStatusPage {
     } else if(batteryPercentage >= 60) { // High Battery 
       color = 'Green';
     } else if(batteryPercentage >= 40) { // Medium Battery
-      color = 'Gold';
-    } else if(batteryPercentage >= 20) { // Low Battery
       color = 'DarkOrange';
+    } else if(batteryPercentage >= 20) { // Low Battery
+      color = 'OrangeRed';
     } else { // Extremely-Low Battery
       color = 'Red'
     }

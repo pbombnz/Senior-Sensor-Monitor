@@ -13,11 +13,8 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-card>
-    <ion-card-content>Status: <b>{{mqtt.status}}</b></ion-card-content>
-  </ion-card>
-
+<ion-content padding style="background-color: gainsboro">
+  <mqtt-status></mqtt-status>
   <ion-row justify-content-center align-items-center>
     <button ion-button (click)="mqtt.status === 'Disconnected' ? mqtt.connect() : mqtt.disconnect()">{{mqtt.status === 'Disconnected' ? 'Connect' : 'Disconnect'}}</button>
   </ion-row>
