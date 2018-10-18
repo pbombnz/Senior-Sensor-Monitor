@@ -86,7 +86,7 @@ export class MqttClientProvider {
     let nowTime: moment.Moment = moment();
 
     console.log("nowTime.diff(noMotionSinceTime, 'minutes'): ", nowTime.diff(noMotionSinceTime, 'minutes'));
-    if (nowTime.diff(noMotionSinceTime, 'minutes') >= this.noMotionTimer_durationOfNoMotion_minutes) {
+    if (nowTime.diff(noMotionSinceTime, 'minutes') > this.noMotionTimer_durationOfNoMotion_minutes) {
       if(this.onNoMotionDetected) {
         this.onNoMotionDetected();
       }
@@ -117,9 +117,11 @@ export class MqttClientProvider {
 
   public disconnect () {
   	if(this.status == 'Connected') {
-  		this.status = 'Disconnecting...';
+      this.status = 'Disconnecting...';
+      console.log('Disconnecting...')
       this.client.disconnect();
-  		this.status = 'Disconnected';
+      this.status = 'Disconnected';
+      console.log('Disconnected')
   	}
   }
 
@@ -175,7 +177,7 @@ export class MqttClientProvider {
     //this.message = message.payloadString;
     this.addMessageToBuffer(message.payloadString);
     
-    //console.log(this.locationBuffer);
+    console.log(this.locationBuffer);
     //console.log(this.motionActivity_count)
   }
 
@@ -259,27 +261,27 @@ export class MqttClientProvider {
     return func();
   }*/
 
-  generateBedroomPos(): any {
+  private generateBedroomPos(): any {
     return {x: this.getRandomInt(15,105), y: this.getRandomInt(145,200)};
   }
 
-  generateToiletPos(): any {
+  private generateToiletPos(): any {
     return {x: this.getRandomInt(135,180), y: this.getRandomInt(170,195)};
   }
 
-  generateLivingRoomPos(): any {
+  private generateLivingRoomPos(): any {
     return {x: this.getRandomInt(15,120), y: this.getRandomInt(15,115)};
   }
 
-  generateDiningRoomPos(): any {
+  private generateDiningRoomPos(): any {
     return {x: this.getRandomInt(250,350), y: this.getRandomInt(50,145)};
   }
 
-  generateKitchenPos(): any {
+  private generateKitchenPos(): any {
     return {x: this.getRandomInt(230,335), y: this.getRandomInt(178,180)};
   }
 
-  getRandomInt(min, max): number {
+  private getRandomInt(min, max): number {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
