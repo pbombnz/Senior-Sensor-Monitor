@@ -1,2 +1,78 @@
 page-senior-status {
 }
+
+.livingroom {
+    position: absolute;
+    top: 3%;
+    left: 2%;
+    right: 67%;
+    bottom: 40%;
+    background-color: blue;
+    color: white;
+    opacity: 0.3;
+    font-size: 2vw;
+    text-align: center;
+}
+
+.bedroom {
+    position: absolute;
+    top: 63%;
+    left: 2%;
+    right: 68%;
+    bottom: 3%;
+    background-color: blue;
+    color: white;
+    opacity: 0.3;
+    font-size: 1.6vw;
+    text-align: center;
+}
+
+.toilet {
+    position: absolute;
+    top: 76%;
+    left: 33%;
+    right: 46%;
+    bottom: 3%;
+    background-color: blue;
+    color: white;
+    opacity: 0.3;
+    font-size: 1.5vw;
+    text-align: center;
+}
+
+.kitchen {
+    position: absolute;
+    top: 70%;
+    left: 56%;
+    right: 1%;
+    bottom: 3%;
+    background-color: blue;
+    color: white;
+    opacity: 0.3;
+    font-size: 2vw;
+    text-align: center;
+}
+
+.diningroom {
+    position: absolute;
+    top: 18%;
+    left: 71%;
+    right: 1%;
+    bottom: 32%;
+    background-color: blue;
+    color: white;
+    opacity: 0.3;
+    font-size: 2vw;
+    text-align: center;
+}
+
+.room-text {
+    position: absolute;
+    top: 25%;
+    left: 15%;
+    right: 15%;
+}
+
+.motion {
+    background-color: red !important;
+}

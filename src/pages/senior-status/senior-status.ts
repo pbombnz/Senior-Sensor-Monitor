@@ -32,17 +32,11 @@ export class SeniorStatusPage {
   }
 
   ngAfterViewInit() {
-    this.heatmap = h337.create({
+    /*this.heatmap = h337.create({
       container: window.document.querySelector('#heatmap'),
       maxOpacity: 0.4,
       minOpacity: 0.6,
       radius: 10,
-    });
-    /*this.heatmap.setData({
-      data: [
-        {x: 50, y: 50, value: 1}, // Living Room
-        {x: 90, y: 210, value: 1}, // Bedroom
-       ]
     });*/
   }
 }

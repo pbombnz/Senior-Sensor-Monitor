@@ -36,9 +36,18 @@
     </ion-card-header>
     <ion-card-content [ngStyle]="{'padding-left': (platform.width() < 420) ? '0px' : '16px', 'padding-right': (platform.width() < 420) ? '0px' : '16px' }">
       <ion-row>
-        <ion-col no-padding>
-          <div id="heatmap" style="margin: auto; width: 370px; height: 208px; background-image: url('assets/imgs/house.jpg'); background-repeat:no-repeat; background-size:contain;">
+        <ion-col>
+          <div style="position: relative; width: 75%; margin:0 auto">
+            <img src="assets/imgs/house.jpg">
+            <div class="livingroom" [ngClass]="{ 'motion': mqtt.locationBuffer.living?.motion_status }"><div class="room-text">Living Room</div></div>
+            <div class="bedroom" [ngClass]="{ 'motion': mqtt.locationBuffer.bedroom?.motion_status }"><div class="room-text">Bedroom</div></div>
+            <div class="toilet" [ngClass]="{ 'motion': mqtt.locationBuffer.toilet?.motion_status }"><div class="room-text">Toilet</div></div>
+            <div class="kitchen" [ngClass]="{ 'motion': mqtt.locationBuffer.kitchen?.motion_status }"><div class="room-text">Kitchen</div></div>
+            <div class="diningroom" [ngClass]="{ 'motion': mqtt.locationBuffer.dining?.motion_status }"><div class="room-text">Dining Room</div></div>
           </div>
+          <!-- Heatmap Disabled as the motion detection is not pinpoint location -->
+          <!--div id="heatmap" style="margin: auto; width: 370px; height: 208px; background-image: url('assets/imgs/house.jpg'); background-repeat:no-repeat; background-size:contain;">
+          </div -->
         </ion-col>
         <ion-col>
           <table class="pure-table pure-table-horizontal" style="width: 100%">
