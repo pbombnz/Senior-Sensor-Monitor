@@ -59,11 +59,13 @@ export class MqttClientProvider {
   /**
    * The number of milliseconds that the timer waits to be called again. Defaults to 60000 (1 minute).
    */
+  //noMotionTimer_interval: number = 10000;
   noMotionTimer_interval: number = 60000;
 
   /**
    * 
    */
+  //noMotionTimer_durationOfNoMotion_minutes: number = -1; 
   noMotionTimer_durationOfNoMotion_minutes: number = 5; 
 
   /**
