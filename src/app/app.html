@@ -19,7 +19,7 @@
 </div>
 
 <div *ngIf="mqtt.status === 'Connected' ||  mqtt.status === 'Disconnecting...' || mqtt.status === 'Disconnected'">
-  <ion-tabs tabsPlacement="bottom">
+  <ion-tabs tabsPlacement="bottom" #myTabs>
     <ion-tab [root]="tab1Root" tabTitle="Senior Status" tabIcon="walk"></ion-tab>
     <ion-tab [root]="tab2Root" tabTitle="Battery Status" tabIcon="battery-full"></ion-tab>
     <!--ion-tab [root]="tab3Root" tabTitle="Settings" tabIcon="settings"></ion-tab -->

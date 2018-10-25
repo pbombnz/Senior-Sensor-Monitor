@@ -1,5 +1,5 @@
-import { Component  } from '@angular/core';
-import { Platform, AlertController, ToastController  } from 'ionic-angular';
+import { Component, ViewChild  } from '@angular/core';
+import { Platform, AlertController, ToastController, Tabs  } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LocalNotifications  } from '@ionic-native/local-notifications';
@@ -16,6 +16,7 @@ import { MqttClientProvider } from '../providers/mqtt-client/mqtt-client';
   templateUrl: 'app.html'
 })
 export class MyApp {
+  @ViewChild('myTabs') tabRef: Tabs;
 
   tab1Root:any = SeniorStatusPage;
   tab2Root:any = BatteryStatusPage;
@@ -39,30 +40,37 @@ export class MyApp {
       // Identifying how to issue notifications to a device this application is running on.
       if(platform.is('mobile')) {
         this.notificationType = 'native';
+        this.localNotifications.on('click').subscribe((notification) => {
+          //console.log('PBOMB: ', notification);
+          if(this.tabRef) {
+            this.tabRef.select(0); // Navigate to Senior Status (specified by handout)
+          }
+        });
       } else {
         //Platform is some form of Browser
-
-        // Check for Notification API (only works on newer browsers).
-        if (!("Notification" in window)) {
-          // Notification API support not found, alert boxes will be used.
-          this.presentNoNotificationToast();
-          this.notificationType = 'alert';
-        } else {
-          //console.log(Notification);
-          if (Notification.permission === "default") {
+        try {
+          // Check for Notification API (only works on newer browsers).
+          if (!("Notification" in window)) {
+            // Notification API support not found, alert boxes will be used.
+            this.presentNoNotificationToast();
             this.notificationType = 'alert';
-            Notification.requestPermission().then(function (permission) {
-              // If the user accepts, let's create a notification
-              if (permission === "granted") {
-                this.notificationType = 'browser';
-              }
-            }.bind(this));
-          } else if (Notification.permission === "granted") {
-            this.notificationType = 'browser';
-          } else if (Notification.permission === "denied") {
-            this.notificationType = 'alert';
+          } else {
+            //console.log(Notification);
+            if ((Notification as any).permission === "default") {
+              this.notificationType = 'alert';
+              (Notification as any).requestPermission().then(function (permission) {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                  this.notificationType = 'browser';
+                }
+              }.bind(this));
+            } else if ((Notification as any).permission === "granted") {
+              this.notificationType = 'browser';
+            } else if ((Notification as any).permission === "denied") {
+              this.notificationType = 'alert';
+            }
           }
-        }
+        } catch(e) { }
       }
       mqtt.onNoMotionDetected = this.onNoMotionDetected.bind(this);
     });
@@ -87,9 +95,15 @@ export class MyApp {
   }
 
   scheduleBrowserNotification() {
-    new Notification('Prolonged inactivity for the Last 5 minutes', {
+    let notification = new Notification('Prolonged inactivity for the Last 5 minutes', {
       body: 'Its suggested to ring emergency services if the individual is not available in attempts to contact them.'
     });
+    notification.onclick = (event) => {
+        //event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        if(this.tabRef) {
+          this.tabRef.select(0); // Navigate to Senior Status (specified by handout)
+        }
+    }
   }
 
   scheduleNativeNotification() {

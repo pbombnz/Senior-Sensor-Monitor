@@ -1,6 +1,6 @@
 <div>
-    <button ion-button color="secondary" block round *ngIf="mqtt.status === 'Connected'">Status: {{mqtt.status}}</button>
-    <button ion-button color="danger" block round *ngIf="mqtt.status === 'Disconnected'">Status: {{mqtt.status}}</button>
-    <button ion-button color="danger" block round *ngIf="mqtt.status === 'Failed to connect'">Status: {{mqtt.status}} - ATTEMPTING TO RECONNECT...</button>
-    <button ion-button color="warning" block round *ngIf="mqtt.status === 'Disconnecting...' || mqtt.status === 'Connecting...'">Status: {{mqtt.status}}</button>
+    <button ion-button color="secondary" block round text-wrap *ngIf="mqtt.status === 'Connected'">Status: {{mqtt.status}}</button>
+    <button ion-button color="danger" block round text-wrap *ngIf="mqtt.status === 'Disconnected'">Status: {{mqtt.status}}</button>
+    <button ion-button color="danger" block round text-wrap *ngIf="mqtt.status === 'Failed to connect'">Status: {{mqtt.status}} - ATTEMPTING TO RECONNECT...</button>
+    <button ion-button color="warning" block round text-wrap *ngIf="mqtt.status === 'Disconnecting...' || mqtt.status === 'Connecting...'">Status: {{mqtt.status}}</button>
 </div>
