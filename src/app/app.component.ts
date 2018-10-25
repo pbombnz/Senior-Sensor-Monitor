@@ -100,6 +100,8 @@ export class MyApp {
     });
     notification.onclick = (event) => {
         //event.preventDefault(); // prevent the browser from focusing the Notification's tab
+        parent.focus();
+        window.focus(); //just in case, older browsers
         if(this.tabRef) {
           this.tabRef.select(0); // Navigate to Senior Status (specified by handout)
         }
