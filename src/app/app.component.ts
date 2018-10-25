@@ -70,7 +70,7 @@ export class MyApp {
 
   presentNoNotificationToast() {
     const toast = this.toastCtrl.create({
-      message: 'Notifications are not supported platform/browser. We will use Alternative methods...',
+      message: 'Notifications are not supported on this platform/browser. We will use alert boxes to notify you of serious events.',
       duration: 7000
     });
     toast.present();
