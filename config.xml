@@ -2,7 +2,7 @@
 <widget id="nz.pbomb.elderlymonitor" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>ElderlyMonitor</name>
     <description>An Eldery Monitoring Service</description>
-    <author email="bhikhupras@ecs.vuw.ac.nz" href="http://ionicframework.com/">Prashant Bhihku</author>
+    <author email="pbombnz@gmail.com" href="http://ionicframework.com/">Prashant</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

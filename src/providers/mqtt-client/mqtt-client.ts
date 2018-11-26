@@ -12,8 +12,8 @@ export class MqttClientProvider {
   client: any = null;
   //message: any = '';
   //messageToSend: string = 'Your message';
-  topic: string = 'swen325/a3';
-  clientId: string = 'bhikhupras';
+  topic: string = ''; // INSERT TOPIC HERE
+  clientId: string = ''; // INSERT USERNAME HERE
 
   /**
    * Holds latest sensor information on each location/room.
